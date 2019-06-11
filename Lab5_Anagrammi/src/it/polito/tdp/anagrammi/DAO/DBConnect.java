@@ -2,20 +2,38 @@ package it.polito.tdp.anagrammi.DAO;
 
 
 	import java.sql.Connection;
-	import java.sql.DriverManager;
+	
 	import java.sql.SQLException;
+
+import com.zaxxer.hikari.HikariDataSource;
 
 
 public class DBConnect {
+	
+	
+
+private static HikariDataSource ds = null;
 
 		public static Connection getConnection() {
-		Connection conn;
-		try{	
-			String jdbcURL= "jdbc:mysql://127.0.0.1:3306/dizionario?user=root&password=root&autoReconnect=true&useSSL=false";
 			
-			 conn =DriverManager.getConnection(jdbcURL);
-		}catch (SQLException e) {e.printStackTrace();return null;};
-
-		return conn;
+		
+		Connection conn;
+			
+			String jdbcURL= "jdbc:mysql://127.0.0.1:3306/dizionario";
+			try {
+	 if (ds==null) {
+		ds= new HikariDataSource();
+		ds.setJdbcUrl(jdbcURL);
+		ds.setUsername("root");
+		ds.setPassword("root");
+		 }
+	conn= ds.getConnection();
+	 return conn;
+	 
+			}
+			catch(SQLException se) {return null;}
+		
 		}
-	}
+}
+
+
